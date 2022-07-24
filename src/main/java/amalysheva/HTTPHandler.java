@@ -1,6 +1,7 @@
 package amalysheva;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Logger;
 
@@ -22,9 +23,8 @@ public class HTTPHandler implements Runnable {
 
     public void run() {
         try {
-            String clientRequest = bufferedReader.readLine();
-            String[] arr = clientRequest.split(" ", 2);
-            switch (arr[0]) {
+//            runServer();
+            switch (getMethod()) {
                 case "GET":
                     get(readPage(HTML_PAGE_GET));
                     break;
@@ -47,6 +47,11 @@ public class HTTPHandler implements Runnable {
         LOGGER.info("Client processing finished");
     }
 
+    private String getMethod() throws IOException {
+        String clientRequest = bufferedReader.readLine();
+        String[] arr = clientRequest.split(" ", 2);
+        return arr[0];
+    }
     public void get(String s) throws Throwable {
         String response = PROTOCOL_VERSION + DELIMITER + STATUS_CODE_OK + DELIMITER + "OK\r\n" +
                 TEXT_CONTENT_TYPE + "\r\n" +
