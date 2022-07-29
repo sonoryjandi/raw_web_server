@@ -33,16 +33,14 @@ public class Server implements Runnable {
     }
 }
 
-abstract class HTTPHandler implements Runnable, ServletInterface {
+ abstract class HTTPHandler implements Runnable, ServletInterface {
     private final static Logger LOGGER = Logger.getLogger(HTTPHandler.class.getName());
-    private Socket socket;
-    private InputStream inputStream;
-    OutputStream outputStream;
-    private BufferedReader bufferedReader;
+    private final Socket socket;
+     protected final OutputStream outputStream;
+    private final BufferedReader bufferedReader;
 
     HTTPHandler(Socket socket) throws Throwable {
         this.socket = socket;
-        this.inputStream = socket.getInputStream();
         this.outputStream = socket.getOutputStream();
         this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
@@ -78,11 +76,11 @@ abstract class HTTPHandler implements Runnable, ServletInterface {
         return arr[0];
     }
 
-    public abstract void get(String s) throws Throwable;
+     abstract public void get(String s) throws Throwable;
 
-    public abstract void post(String s) throws IOException;
+     abstract public void post(String s) throws IOException;
 
-    public void noMethod() throws IOException {
+     public void noMethod() throws IOException {
         String response = PROTOCOL_VERSION + DELIMITER + STATUS_CODE_CLIENT_ERROR + DELIMITER + "Bad Request\r\n" +
                 TEXT_CONTENT_TYPE + "\r\n" +
                 CONNECTION_STATUS + "\r\n\r\n";
